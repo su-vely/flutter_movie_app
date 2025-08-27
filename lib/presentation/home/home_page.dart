@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_app/domain/entity/movie.dart';
+import 'package:flutter_movie_app/presentation/detail/detail_page.dart';
 import 'package:flutter_movie_app/presentation/home/home_viewmodel.dart';
 import 'package:flutter_movie_app/routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,13 +29,24 @@ class HomePage extends ConsumerWidget {
                 style: TextStyle(fontSize: 21),
               ),
             ),
+            SizedBox(height: 10),
             if (popularMoviesAsync.value != null) ...[
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: ClipRRect(
-                      borderRadius: BorderRadiusGeometry.circular(20),
-                      child: Image.network(
-                          popularMoviesAsync.value!.first.posterPath)))
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      Movie m = popularMoviesAsync.value!.first;
+                      return DetailPage(id: m.id, posterUrl: m.posterPath);
+                    },
+                  ));
+                },
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: ClipRRect(
+                        borderRadius: BorderRadiusGeometry.circular(20),
+                        child: Image.network(
+                            popularMoviesAsync.value!.first.posterPath))),
+              )
             ],
             _buildSection(
               context,
